@@ -1,0 +1,26 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+# Insert the website you want to scrape
+url = "https://example.com"
+
+response = requests.get(url)
+soup = BeautifulSoup(response.text, "html.parser")
+
+cars = soup.find_all("div", class_="car")
+
+data = []
+
+for car in cars:
+    title = car.find("h2").text
+    price = car.find("span", class_="price").text
+
+    data.append([title, price])
+
+with open("cars.csv", "w", newline="", encoding="utf-8") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Car", "Price"])
+    writer.writerows(data)
+
+print("Data saved to cars.csv")
